@@ -21,7 +21,8 @@ Temperature (using [HadCRUT5 data](https://crudata.uea.ac.uk/cru/data/temperatur
   * `HadCRUT5_sh.csv`: csv version
 
 Precipitation:
-* [CRU dataset](https://catalogue.ceda.ac.uk/uuid/89e1e34ec3554dc98594a5732622bce9)
+[CRU TS4 dataset](https://catalogue.ceda.ac.uk/uuid/89e1e34ec3554dc98594a5732622bce9) (download the nc.gz files)
+* `cru_ts4.04.YYYY.YYYY.pre.dat.nc`: time span is first YYYY to second YYYY
 
 ### Carbon Sink Data
 * `Global_Carbon_Budget_2020v1.0.xlsx`: [2020 carbon budget](https://www.icos-cp.eu/science-and-impact/global-carbon-budget/2020)
