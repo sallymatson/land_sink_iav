@@ -13,9 +13,9 @@ Monthly atmospheric data from MLO and SPO is [here](https://scrippsco2.ucsd.edu/
 
 ### Weather Data
 Temperature (using [HadCRUT5 data](https://crudata.uea.ac.uk/cru/data/temperature/)):
-* `HadCRUT5_monthlymean.txt`: Global monthly mean temperature, downloaded from CRU website. The sv version is processed using `read_cru_hemi()` from `utils.R`.
-* `HadCRUT5_nh.txt`: Northern Hemisphere mean temperature
-* `HadCRUT5_sh.txt`: Southern Hemisphere mean temperature
+* `HadCRUT5_monthlymean.csv`: Global monthly mean temperature is downloaded from CRU website. The csv version is processed using `read_cru_hemi()` from `utils.R` (and then delete index column.)
+* `HadCRUT5_nh.csv`: Northern Hemisphere mean temperature
+* `HadCRUT5_sh.csv`: Southern Hemisphere mean temperature
 
 Precipitation:
 [CRU TS4 dataset](https://catalogue.ceda.ac.uk/uuid/89e1e34ec3554dc98594a5732622bce9) (download the nc.gz files)
