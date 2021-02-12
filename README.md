@@ -23,7 +23,7 @@ Precipitation:
 
 ### Carbon Sink Data
 * `Global_Carbon_Budget_2020v1.0.xlsx`: [2020 carbon budget](https://www.icos-cp.eu/science-and-impact/global-carbon-budget/2020)
-  * `global_sink.csv`: Extracting information from above, column D - column C - column B
+  * `annual_global_sink.csv`: Extracting carbon sink information from above (col D - C - B)
 * `DGVM_monthly`: Land sink information generated from `cal_DGVM_monthly.py`:
   * `DGVM_MODEL_monthly.csv`: Columns are date (YYYYMM), global, north exatropics, tropics, and south exatropics in PgC.
 * `GOBM_monthly`: Ocean sink information generated from `cal_GOBM_monthly.py`:
