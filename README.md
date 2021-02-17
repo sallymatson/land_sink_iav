@@ -3,28 +3,37 @@ Dissertation project for MSc Climate Change.
 
 ## Data Sources
 ### CO<sub>2</sub> Data
-Access to the NOAA ESRL data files is found [here](https://www.esrl.noaa.gov/gmd/ccgg/trends/gl_data.html):
+[NOAA ESRL data](https://www.esrl.noaa.gov/gmd/ccgg/trends/gl_data.html):
 * `co2_mm_gl.csv`: Globally averaged marine surface monthly mean data
 * `co2_annmean_gl.csv`: Globally averaged marine surface yearly mean data
 * `co2_gr_gl.csv`: Globally averaged marine surface annual mean growth rates
 
-Monthly atmospheric data from MLO and SPO is [here](https://scrippsco2.ucsd.edu/data/atmospheric_co2/mlo.html):
+[Monthly atmospheric data from MLO and SPO](https://scrippsco2.ucsd.edu/data/atmospheric_co2/mlo.html):
 * `monthly_mlo_spo.xlsx`: File sent from Corinne on 2/1/2021.
+* `monthly_mlo_spo.csv`: Extraction from the excel file.
 
 ### Weather Data
-Temperature (using [HadCRUT5 data](https://crudata.uea.ac.uk/cru/data/temperature/)):
-* `HadCRUT5_monthlymean.csv`: Global monthly mean temperature is downloaded from CRU website. The csv version is processed using `read_cru_hemi()` from `utils.R` (and then delete index column.)
-* `HadCRUT5_nh.csv`: Northern Hemisphere mean temperature
-* `HadCRUT5_sh.csv`: Southern Hemisphere mean temperature
+Temperature (using [HadCRUT5](https://crudata.uea.ac.uk/cru/data/temperature/)):
+* `HadCRUT5_gl.txt`, `HadCRUT5_nh.txt`, `HadCRUT5_nh.txt`: Global (or North/Southern hemisphere) monthly mean temperature downloaded from CRU website (to open use `data_utils.open_cru_file()`.)
 
-Precipitation:
-[CRU TS4 dataset](https://catalogue.ceda.ac.uk/uuid/89e1e34ec3554dc98594a5732622bce9) (download the nc.gz files)
-* `cru_ts4.04.YYYY.YYYY.pre.dat.nc`: time span is first YYYY to second YYYY
+Precipitation (using [CRU TS4 data](https://catalogue.ceda.ac.uk/uuid/89e1e34ec3554dc98594a5732622bce9)):
+* `cru_ts4.04.YYYY.YYYY.pre.dat.nc`: time span is first YYYY to second YYYY. Combined using `data_utils.open_precipitation()`.
 
 ### Carbon Sink Data
 * `Global_Carbon_Budget_2020v1.0.xlsx`: [2020 carbon budget](https://www.icos-cp.eu/science-and-impact/global-carbon-budget/2020)
-  * `annual_global_sink.csv`: Extracting carbon sink information from above (col D - C - B)
+  * `annual_global_sink.csv`: Extracting relevant information from above.
 * `DGVM_monthly`: Land sink information generated from `cal_DGVM_monthly.py`:
   * `DGVM_MODEL_monthly.csv`: Columns are date (YYYYMM), global, north exatropics, tropics, and south exatropics in PgC.
 * `GOBM_monthly`: Ocean sink information generated from `cal_GOBM_monthly.py`:
   * `GOBM_MODEL_monthly.csv`: Columns are date (YYYYMM), global, north exatropics, tropics, and south exatropics in PgC.
+
+
+| Dataset                | Timescale      |
+| ---------------------- | -------------- |
+| CO2 (NOAA ESRL)        | 1980 - 11/2020 |
+| CO2 (MLO, SPO)         | 1958 - 10/2020 |
+| Temperature (HADCRUT5) | 1850 - 2019    |
+| Precipitation (TS4)    |                |
+| Global carbon budget   | 1959 - 2019    |
+| DGVMs                  | 1700 - 12/2019 |
+| GCBMs                  | 1958 - 12/2019 |
