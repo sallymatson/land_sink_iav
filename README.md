@@ -37,3 +37,8 @@ Precipitation (using [CRU TS4 data](https://catalogue.ceda.ac.uk/uuid/89e1e34ec3
 | Global carbon budget   | 1959 - 2019    |
 | DGVMs                  | 1700 - 12/2019 |
 | GCBMs                  | 1958 - 12/2019 |
+
+
+### TODOs
+* Check how the `.mean()` function deals with NA values for precpitation averages. It should ideally ignore NAs and not count them in the denominator.
+* Create a function to average all of the DGVM and GOBMs and add these to the overall sheet.
