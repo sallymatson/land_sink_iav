@@ -28,15 +28,15 @@ Precipitation (using [CRU TS4 data](https://catalogue.ceda.ac.uk/uuid/89e1e34ec3
   * `GOBM_MODEL_monthly.csv`: Columns are date (YYYYMM), global, north exatropics, tropics, and south exatropics in PgC.
 
 
-| Dataset                | Timescale      |
-| ---------------------- | -------------- |
-| CO2 (NOAA ESRL)        | 1980 - 11/2020 |
-| CO2 (MLO, SPO)         | 1958 - 10/2020 |
-| Temperature (HADCRUT5) | 1850 - 2019    |
-| Precipitation (TS4)    |                |
-| Global carbon budget   | 1959 - 2019    |
-| DGVMs                  | 1700 - 12/2019 |
-| GCBMs                  | 1958 - 12/2019 |
+| Dataset                | Timescale      | Units      |
+| ---------------------- | -------------- | ---------- |
+| CO2 (NOAA ESRL)        | 1980 - 11/2020 | ppm        |
+| CO2 (MLO, SPO)         | 1958 - 10/2020 | GtC/month  |
+| Temperature (HADCRUT5) | 1850 - 2019    | anomaly    |
+| Precipitation (TS4)    | 1901 - 12/2019 | mm/month   |
+| Global carbon budget   | 1959 - 2019    |            |
+| DGVMs                  | 1700 - 12/2019 | GtC/month  |
+| GCBMs                  | 1958 - 12/2019 | GtC/month  |
 
 
 ### TODOs
