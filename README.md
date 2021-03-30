@@ -23,9 +23,9 @@ Precipitation (using [CRU TS4 data](https://catalogue.ceda.ac.uk/uuid/89e1e34ec3
 * `Global_Carbon_Budget_2020v1.0.xlsx`: [2020 carbon budget](https://www.icos-cp.eu/science-and-impact/global-carbon-budget/2020)
   * `annual_global_sink.csv`: Extracting relevant information from above.
 * `DGVM_monthly`: Land sink information generated from `cal_DGVM_monthly.py`:
-  * `DGVM_MODEL_monthly.csv`: Columns are date (YYYYMM), global, north exatropics, tropics, and south exatropics in PgC.
+  * `DGVM_MODEL_monthly.csv`: Columns are date (YYYYMM), global, north exatropics, tropics, and south exatropics in PgC/month.
 * `GOBM_monthly`: Ocean sink information generated from `cal_GOBM_monthly.py`:
-  * `GOBM_MODEL_monthly.csv`: Columns are date (YYYYMM), global, north exatropics, tropics, and south exatropics in PgC.
+  * `GOBM_MODEL_monthly.csv`: Columns are date (YYYYMM), global, north exatropics, tropics, and south exatropics in PgC/month.
 
 
 | Dataset                | Timescale      |
@@ -37,3 +37,8 @@ Precipitation (using [CRU TS4 data](https://catalogue.ceda.ac.uk/uuid/89e1e34ec3
 | Global carbon budget   | 1959 - 2019    |
 | DGVMs                  | 1700 - 12/2019 |
 | GCBMs                  | 1958 - 12/2019 |
+
+
+### TODOs
+* Check how the `.mean()` function deals with NA values for precpitation averages. It should ideally ignore NAs and not count them in the denominator.
+	* Extract temperature means from cdf, can use this to check against.

@@ -5,3 +5,7 @@
 .DS_store
 *.Rproj
 myvenv/
+*.ipynb
+__pycache__/
+*.pdf
+*.png
