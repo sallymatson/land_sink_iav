@@ -5,8 +5,5 @@
 .DS_store
 *.Rproj
 myvenv/
-*.ipynb
 __pycache__/
-*.pdf
-*.png
-data/
+old_notebooks/
