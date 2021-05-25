@@ -1,5 +1,8 @@
 ## Using ML to estimate carbon sinks
-Dissertation project for MSc Climate Change.
+Dissertation project for MSc Climate Change. 
+
+- 3/17/2021: Dissertation proposal submitted
+- 3/31/2021: [Progress presentation](https://docs.google.com/presentation/d/1cRt70FpyEDJgw5rioyKlGI4nsppwOjQM4TiY3B94d3Q/edit) to lab group
 
 ## Data Sources
 ### CO<sub>2</sub> Data
@@ -12,12 +15,20 @@ Dissertation project for MSc Climate Change.
 * `monthly_mlo_spo.xlsx`: File sent from Corinne on 2/1/2021.
 * `monthly_mlo_spo.csv`: Extraction from the excel file.
 
-### Weather Data
-Temperature (using [HadCRUT5](https://crudata.uea.ac.uk/cru/data/temperature/)):
-* `HadCRUT5_gl.txt`, `HadCRUT5_nh.txt`, `HadCRUT5_nh.txt`: Global (or North/Southern hemisphere) monthly mean temperature downloaded from CRU website (to open use `data_utils.open_cru_file()`.)
+### Emissions
+* `emissions/GCP-GRidFED.csv`: From Matt
 
+### Weather
 Precipitation (using [CRU TS4 data](https://catalogue.ceda.ac.uk/uuid/89e1e34ec3554dc98594a5732622bce9)):
-* `cru_ts4.04.YYYY.YYYY.pre.dat.nc`: time span is first YYYY to second YYYY. Combined using `data_utils.open_precipitation()`.
+* `pre/cru_ts4.04.YYYY.YYYY.pre.dat.nc`: time span is first YYYY to second YYYY. Combined using `data_utils.open_precipitation()`.
+
+Temperature (using [HadCRUT5](https://crudata.uea.ac.uk/cru/data/temperature/)):
+* `temp/HadCRUT5_gl.txt`, `temp/HadCRUT5_nh.txt`, `temp/HadCRUT5_nh.txt`: Global (or North/Southern hemisphere) monthly mean temperature downloaded from CRU website (to open use `data_utils.open_cru_file()`.)
+* `CRUTEM.5.0.1.0.alt.anomalies.nc`: 5 degree grid of land temperature.
+* `HadSST.4.0.1.0_median.nc`: 5 degree grid of sea surface temperature.
+
+Wind (from [NCEP/NCAR](https://psl.noaa.gov/data/gridded/data.ncep.reanalysis.derived.surface.html)):
+* `wind/sig995.mon.mean.nc`: 2.5 degree grid of monthly mean wind speed.
 
 ### Carbon Sink Data
 * `Global_Carbon_Budget_2020v1.0.xlsx`: [2020 carbon budget](https://www.icos-cp.eu/science-and-impact/global-carbon-budget/2020)
@@ -26,6 +37,8 @@ Precipitation (using [CRU TS4 data](https://catalogue.ceda.ac.uk/uuid/89e1e34ec3
   * `DGVM_MODEL_monthly.csv`: Columns are date (YYYYMM), global, north exatropics, tropics, and south exatropics in PgC/month.
 * `GOBM_monthly`: Ocean sink information generated from `cal_GOBM_monthly.py`:
   * `GOBM_MODEL_monthly.csv`: Columns are date (YYYYMM), global, north exatropics, tropics, and south exatropics in PgC/month.
+
+
 
 
 
@@ -38,6 +51,7 @@ Precipitation (using [CRU TS4 data](https://catalogue.ceda.ac.uk/uuid/89e1e34ec3
 | Global carbon budget   | 1959 - 2019    |            |
 | DGVMs                  | 1700 - 12/2019 | GtC/month  |
 | GCBMs                  | 1958 - 12/2019 | GtC/month  |
+| FF emissions           | 1959 - 11/2019 | kgCO2/year |
 
 
 ### TODOs
