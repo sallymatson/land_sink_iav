@@ -14,24 +14,21 @@ def take_weighted_mean(da):
     '''
     weights = np.cos(np.deg2rad(da.lat))  # Area is proportional to cosine of latitude
     weights.name = "weights"
-    weighted_da = da.weighted(weights)
-
     # For the three regions, take the weighted averages
     s_ext = da.sel(lat=slice(-90, -30))
     weighted_s_ext = s_ext.weighted(weights)
     s_ext_mean = weighted_s_ext.mean(['lon', 'lat'], skipna=True)
     s_ext_mean.name = "south_exatropics"
-
+    # tropics
     tropics = da.sel(lat=slice(-30, 30))
     weighted_tropics = tropics.weighted(weights)
     tropics_mean = weighted_tropics.mean(['lon', 'lat'], skipna=True)
     tropics_mean.name = "tropics"
-
+    # n ext
     n_ext = da.sel(lat=slice(30, 90))
     weighted_n_ext = n_ext.weighted(weights)
     n_ext_mean = weighted_n_ext.mean(['lon', 'lat'], skipna=True)
     n_ext_mean.name = "north_exatropics"
-
     # Combine into one ds
     return xr.merge([s_ext_mean, tropics_mean, n_ext_mean])
 
@@ -40,6 +37,7 @@ def open_wind(package_dir):
     wind_filename = os.path.join(package_dir,"weather/wind/wspd.sig995.mon.mean.nc")
     ds = xr.open_dataset(wind_filename)
     da = ds.wspd
+    da = da.reindex(lat=list(reversed(da.lat)))  # lat s->n to match others
     weighted_means = take_weighted_mean(da)
     df = weighted_means.to_dataframe().add_prefix("WSPD_")
     df.index = df.index.to_period("M")
@@ -147,6 +145,7 @@ def generate_all_monthly_data():
          open_landtemp_netcdf(package_dir)).join(
          open_sst_netcdf(package_dir)).join(
          open_precipitation(package_dir)).join(
+         open_wind(package_dir)).join(
          open_enso(package_dir)).join(
          open_ffs(package_dir))
     df.to_csv('all_data.csv')
@@ -155,6 +154,3 @@ def generate_all_monthly_data():
 def open_all_data():
     package_dir = os.path.dirname(os.path.abspath(__file__))
     return pd.read_csv(os.path.join(package_dir,'all_data.csv'), index_col=0)
-
-
-generate_all_monthly_data()
