@@ -1,5 +1,10 @@
 ## Using ML to estimate carbon sinks
-Dissertation project for MSc Climate Change. 
+Dissertation project for MSc Climate Change.
+
+## Navigating the codebase
+todo!
+
+## Progress Updates
 
 - 3/17/2021: [Dissertation proposal](https://github.com/sallymatson/carbon_sinks/blob/main/Dissertation%20Proposal.pdf) submitted
 - 3/31/2021: [Progress presentation](https://docs.google.com/presentation/d/1cRt70FpyEDJgw5rioyKlGI4nsppwOjQM4TiY3B94d3Q/edit) to lab group
