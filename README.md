@@ -1,15 +1,10 @@
 ## Using ML to estimate carbon sinks
 Dissertation project for MSc Climate Change. 
 
-- 3/17/2021: Dissertation proposal submitted
+- 3/17/2021: [Dissertation proposal](https://github.com/sallymatson/carbon_sinks/blob/main/Dissertation%20Proposal.pdf) submitted
 - 3/31/2021: [Progress presentation](https://docs.google.com/presentation/d/1cRt70FpyEDJgw5rioyKlGI4nsppwOjQM4TiY3B94d3Q/edit) to lab group
 
-## Data Sources
-	* [Monthly atmospheric data from MLO and SPO](https://scrippsco2.ucsd.edu/data/atmospheric_co2/mlo.html):
-		* `monthly_mlo_spo.xlsx`: File sent from Corinne on 2/1/2021.
-		* `monthly_mlo_spo.csv`: Extraction from the excel file.
-* Emissions: `emissions/GCP-GRidFED.csv` (From Matt)
-
+## Data
 
 | Dataset                | Timescale      | Units      |
 | ---------------------- | -------------- | ---------- |
