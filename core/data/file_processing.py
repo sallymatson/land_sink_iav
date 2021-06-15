@@ -18,17 +18,17 @@ def take_weighted_mean(da):
     s_ext = da.sel(lat=slice(-90, -30))
     weighted_s_ext = s_ext.weighted(weights)
     s_ext_mean = weighted_s_ext.mean(['lon', 'lat'], skipna=True)
-    s_ext_mean.name = "south_exatropics"
+    s_ext_mean.name = "SHex"
     # tropics
     tropics = da.sel(lat=slice(-30, 30))
     weighted_tropics = tropics.weighted(weights)
     tropics_mean = weighted_tropics.mean(['lon', 'lat'], skipna=True)
-    tropics_mean.name = "tropics"
+    tropics_mean.name = "TR"
     # n ext
     n_ext = da.sel(lat=slice(30, 90))
     weighted_n_ext = n_ext.weighted(weights)
     n_ext_mean = weighted_n_ext.mean(['lon', 'lat'], skipna=True)
-    n_ext_mean.name = "north_exatropics"
+    n_ext_mean.name = "NHex"
     # Combine into one ds
     return xr.merge([s_ext_mean, tropics_mean, n_ext_mean])
 
@@ -84,10 +84,10 @@ def open_sink(model, sink_type, package_dir):
     # Read the corresponding model data into a df:
     df = pd.read_csv(os.path.join(package_dir,f'sink/{sink_type}_monthly/{sink_type}_{model}_monthly.csv'), 
                        names=["_timestamp",
-                              f"{type_name}_sink_global",
-                              f"{type_name}_sink_North",
-                              f"{type_name}_sink_Tropics",
-                              f"{type_name}_sink_South"],
+                              f"{type_name}_sink_GL",
+                              f"{type_name}_sink_NHex",
+                              f"{type_name}_sink_TR",
+                              f"{type_name}_sink_SHex"],
                        delimiter=" ")
     index = pd.to_datetime(df._timestamp, format="%Y%m").rename("time")
     df = df.set_index(index).to_period("M")
@@ -137,6 +137,12 @@ def open_ffs(package_dir):
     return ffs
 
 
+'''
+OPENING DATA THINGS
+
+'''
+
+
 def generate_all_monthly_data():
     package_dir = os.path.dirname(os.path.abspath(__file__))
     df = open_co2(package_dir).join(
@@ -154,3 +160,39 @@ def generate_all_monthly_data():
 def open_all_data():
     package_dir = os.path.dirname(os.path.abspath(__file__))
     return pd.read_csv(os.path.join(package_dir,'all_data.csv'), index_col=0)
+
+
+'''
+INFERRED LAND SINK THINGS
+'''
+
+def open_global_ffs(package_dir):
+    ffs = pd.read_csv(os.path.join(package_dir,'emissions/GCP-GridFED-GL.csv'), index_col=0, skiprows=2)
+    ffs = ffs.set_index(pd.to_datetime(ffs.index)).to_period("M")
+    return ffs
+
+
+def open_luc(package_dir):
+    luc = pd.read_csv(os.path.join(package_dir,'LUC/BLUE_global_LUC.csv'), index_col=0)
+    luc = luc.set_index(pd.to_datetime(luc.index, format="%Y")).to_period("M")
+    luc = luc.resample("M").pad()/12
+    return luc
+
+
+def open_co2_monthly_gr(package_dir):
+    co2_gr = pd.read_csv(os.path.join(package_dir,'CO2/co2_mm_gl.csv'), skiprows=59, index_col=0)
+    co2_gr = co2_gr.set_index(pd.to_datetime(co2_gr.index, format="%Y-%m")).to_period("M")
+    return co2_gr[['monthly_gr']]
+
+
+def inferred_land_sink():
+    # Inferred Land sink = FF + LUC - AGR - ocean sink
+    package_dir = os.path.dirname(os.path.abspath(__file__))
+    ff = open_global_ffs(package_dir) # GtC / month
+    luc = open_luc(package_dir)
+    mgr = open_co2_monthly_gr(package_dir) # GtC / month
+    ocean_sink = average_ocean_sink(package_dir)[['ocean_sink_GL']] # GtC / month
+    all_data = ff.join(luc).join(mgr).join(ocean_sink)
+    all_data['Inferred'] = all_data['GL_ff_emissions'] + all_data['LUC'] - all_data['monthly_gr'] - all_data['ocean_sink_GL']
+
+
