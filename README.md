@@ -21,6 +21,6 @@ todo!
 | [Wind speed](https://psl.noaa.gov/data/gridded/data.ncep.reanalysis.derived.surface.html)    | ? | m/s  | |
 | Global carbon budget   | 1959 - 2019    |            | |
 | DGVMs                  | 1700 - 12/2019 | GtC/month  | |
-| GCBMs                  | 1958 - 12/2019 | GtC/month  | |
+| GOBMs                  | 1958 - 12/2019 | GtC/month  | |
 | FF emissions           | 1959 - 11/2019 | kgCO2/month | |
 | [Monthly CO2 gr](https://www.esrl.noaa.gov/gmd/ccgg/trends/gl_data.html)  | 1980 - 11/2020 | gtCO2/month |`CO2/co2_mm_gl.csv` |
