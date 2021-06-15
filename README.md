@@ -11,16 +11,16 @@ todo!
 
 ## Data
 
-| Dataset                | Timescale      | Units      |
-| ---------------------- | -------------- | ---------- |
-| [CO2 (NOAA ESRL)](https://www.esrl.noaa.gov/gmd/ccgg/trends/gl_data.html)| 1980 - 11/2020 | ppm        |
-| [CO2 (MLO, SPO)](https://scrippsco2.ucsd.edu/data/atmospheric_co2/mlo.html)         | 1958 - 10/2020 | GtC/month  |
-| [Land temp (CRUTEM5)](https://crudata.uea.ac.uk/cru/data/temperature/) | 1850 - 2019    | anomaly in degC    |
-| [SST (HadSST4)](https://crudata.uea.ac.uk/cru/data/temperature/) | 1850 - 2019    | anomaly in degC    |
-| [Precipitation (TS4)](https://catalogue.ceda.ac.uk/uuid/89e1e34ec3554dc98594a5732622bce9)    | 1901 - 12/2019 | mm/month   |
-| [Wind speed](https://psl.noaa.gov/data/gridded/data.ncep.reanalysis.derived.surface.html)    | ? | m/s  |
-| Global carbon budget   | 1959 - 2019    |            |
-| DGVMs                  | 1700 - 12/2019 | GtC/month  |
-| GCBMs                  | 1958 - 12/2019 | GtC/month  |
-| FF emissions           | 1959 - 11/2019 | kgCO2/year |
-
+| Dataset                | Timescale      | Units      | File |
+| ---------------------- | -------------- | ---------- | -----|
+| [CO2 (NOAA ESRL)](https://www.esrl.noaa.gov/gmd/ccgg/trends/gl_data.html)| 1980 - 11/2020 | ppm        | |
+| [CO2 (MLO, SPO)](https://scrippsco2.ucsd.edu/data/atmospheric_co2/mlo.html)         | 1958 - 10/2020 | GtC/month  | |
+| [Land temp (CRUTEM5)](https://crudata.uea.ac.uk/cru/data/temperature/) | 1850 - 2019    | anomaly in degC    | |
+| [SST (HadSST4)](https://crudata.uea.ac.uk/cru/data/temperature/) | 1850 - 2019    | anomaly in degC    | |
+| [Precipitation (TS4)](https://catalogue.ceda.ac.uk/uuid/89e1e34ec3554dc98594a5732622bce9)    | 1901 - 12/2019 | mm/month   | |
+| [Wind speed](https://psl.noaa.gov/data/gridded/data.ncep.reanalysis.derived.surface.html)    | ? | m/s  | |
+| Global carbon budget   | 1959 - 2019    |            | |
+| DGVMs                  | 1700 - 12/2019 | GtC/month  | |
+| GCBMs                  | 1958 - 12/2019 | GtC/month  | |
+| FF emissions           | 1959 - 11/2019 | kgCO2/month | |
+| [Monthly CO2 gr](https://www.esrl.noaa.gov/gmd/ccgg/trends/gl_data.html)  | 1980 - 11/2020 | gtCO2/month |`CO2/co2_mm_gl.csv` |
