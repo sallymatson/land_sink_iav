@@ -14,23 +14,31 @@ def take_weighted_mean(da):
     '''
     weights = np.cos(np.deg2rad(da.lat))  # Area is proportional to cosine of latitude
     weights.name = "weights"
+
+    # Weighted global mean
+    weighted_gl = da.weighted(weights)
+    gl_mean = weighted_gl.mean(('lon', 'lat'))
+    gl_mean.name = "GL"
+
     # For the three regions, take the weighted averages
     s_ext = da.sel(lat=slice(-90, -30))
     weighted_s_ext = s_ext.weighted(weights)
     s_ext_mean = weighted_s_ext.mean(['lon', 'lat'], skipna=True)
     s_ext_mean.name = "SHex"
+
     # tropics
     tropics = da.sel(lat=slice(-30, 30))
     weighted_tropics = tropics.weighted(weights)
     tropics_mean = weighted_tropics.mean(['lon', 'lat'], skipna=True)
     tropics_mean.name = "TR"
+
     # n ext
     n_ext = da.sel(lat=slice(30, 90))
     weighted_n_ext = n_ext.weighted(weights)
     n_ext_mean = weighted_n_ext.mean(['lon', 'lat'], skipna=True)
     n_ext_mean.name = "NHex"
     # Combine into one ds
-    return xr.merge([s_ext_mean, tropics_mean, n_ext_mean])
+    return xr.merge([gl_mean, s_ext_mean, tropics_mean, n_ext_mean])
 
 
 def open_wind(package_dir):
@@ -115,7 +123,20 @@ def average_ocean_sink(package_dir):
         df = open_sink(name, "GOBM", package_dir)
         dfs.append(df)
     mean = pd.concat(dfs).groupby(level=[0]).mean()
-    return mean
+    std = pd.concat(dfs).groupby(level=[0]).std()
+    return mean, std
+
+
+def all_dgvms_gl(package_dir):
+    names = ["CLM5.0", "IBIS", "ISAM", "ISBA-CTRIP", "JSBACH",
+             "JULES-ES", "LPJ", "LPX-Bern", "OCN", "ORCHIDEEv3",
+             "SDGVM", "VISIT", "YIBs"]
+    dfs = []
+    for name in names:
+        df = open_sink(name, "DGVM", package_dir)
+        df[name] = df['land_sink_GL']
+        dfs.append(df[[name]])
+    return pd.concat(dfs, axis=1)
 
 
 def open_co2(package_dir):
@@ -138,16 +159,17 @@ def open_ffs(package_dir):
 
 
 '''
-OPENING DATA THINGS
+OPENING DATA
 
 '''
 
 
 def generate_all_monthly_data():
     package_dir = os.path.dirname(os.path.abspath(__file__))
+    average_ocean_sink_val, _ = average_ocean_sink(package_dir)
     df = open_co2(package_dir).join(
          average_land_sink(package_dir)).join(
-         average_ocean_sink(package_dir)).join(
+         average_ocean_sink_val).join(
          open_landtemp_netcdf(package_dir)).join(
          open_sst_netcdf(package_dir)).join(
          open_precipitation(package_dir)).join(
@@ -163,7 +185,7 @@ def open_all_data():
 
 
 '''
-INFERRED LAND SINK THINGS
+INFERRED LAND SINK
 '''
 
 def open_global_ffs(package_dir):
@@ -173,7 +195,7 @@ def open_global_ffs(package_dir):
 
 
 def open_luc(package_dir):
-    luc = pd.read_csv(os.path.join(package_dir,'LUC/BLUE_global_LUC.csv'), index_col=0)
+    luc = pd.read_csv(os.path.join(package_dir,'LUC/global_LUC.csv'), index_col=0)
     luc = luc.set_index(pd.to_datetime(luc.index, format="%Y")).to_period("M")
     luc = luc.resample("M").pad()/12
     return luc
@@ -189,10 +211,39 @@ def inferred_land_sink():
     # Inferred Land sink = FF + LUC - AGR - ocean sink
     package_dir = os.path.dirname(os.path.abspath(__file__))
     ff = open_global_ffs(package_dir) # GtC / month
-    luc = open_luc(package_dir)
+    luc = open_luc(package_dir) # GtC / month
     mgr = open_co2_monthly_gr(package_dir) # GtC / month
-    ocean_sink = average_ocean_sink(package_dir)[['ocean_sink_GL']] # GtC / month
+    emission_flux = ff + luc
+    ocean_sink, _ = average_ocean_sink(package_dir) # GtC / month
+    ocean_sink = ocean_sink[['ocean_sink_GL']]
     all_data = ff.join(luc).join(mgr).join(ocean_sink)
-    all_data['Inferred'] = all_data['GL_ff_emissions'] + all_data['LUC'] - all_data['monthly_gr'] - all_data['ocean_sink_GL']
+    return all_data
 
 
+def inferred_land_sink_uncertainty():
+    # Combine errors ~ in quadrature ~
+    # http://ipl.physics.harvard.edu/wp-uploads/2013/03/PS3_Error_Propagation_sp13.pdf
+    package_dir = os.path.dirname(os.path.abspath(__file__))
+    #package_dir = 'core/data/'
+    # CO2: use annual GR uncertainty, distribute evenly over year
+    co2 = pd.read_csv(os.path.join(package_dir,'CO2/co2_gr_gl.csv'), skiprows=60, index_col=0)
+    co2 = co2.set_index(pd.to_datetime(co2.index, format="%Y")).to_period("M")
+    co2 = co2.resample("M").pad()
+    co2_unc = co2[['co2_gr_unc_monthly']]
+    co2_unc = co2_unc*2.12  # convert from ppm to gt/c
+    # FF: 5% of annual, so 1.44% of annual each month (calculated in quadrature).
+    # Thus, assuming the error is distributed proportionately to monthly val, each month
+    # is 1.44% * 12 (to scale up, bc 1.44% is calucated monthly) i.e. 17%
+    ff = open_global_ffs(package_dir)
+    ff_unc = ff*0.17
+    # Ocean sink: std of models
+    ocean, ocean_unc = average_ocean_sink(package_dir)
+    ocean_unc = ocean_unc[['ocean_sink_GL']]
+    unc = ff.join(co2_unc).join(ocean_unc)
+    # From GCB, yearly LUC unc is +/- 0.7 GtC/year
+    # Monthly is 0.202 using quadrature
+    unc['LUC'] = 0.202
+    unc = unc.dropna()
+    # Square all values; sum across each row; take square root
+    unc = (unc**2).sum(axis=1) ** 1/2
+    unc.to_csv('Inferred_land_sink_unc.csv')
