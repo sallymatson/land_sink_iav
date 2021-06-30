@@ -14,23 +14,31 @@ def take_weighted_mean(da):
     '''
     weights = np.cos(np.deg2rad(da.lat))  # Area is proportional to cosine of latitude
     weights.name = "weights"
+
+    # Weighted global mean
+    weighted_gl = da.weighted(weights)
+    gl_mean = weighted_gl.mean(('lon', 'lat'))
+    gl_mean.name = "GL"
+
     # For the three regions, take the weighted averages
     s_ext = da.sel(lat=slice(-90, -30))
     weighted_s_ext = s_ext.weighted(weights)
     s_ext_mean = weighted_s_ext.mean(['lon', 'lat'], skipna=True)
     s_ext_mean.name = "SHex"
+
     # tropics
     tropics = da.sel(lat=slice(-30, 30))
     weighted_tropics = tropics.weighted(weights)
     tropics_mean = weighted_tropics.mean(['lon', 'lat'], skipna=True)
     tropics_mean.name = "TR"
+
     # n ext
     n_ext = da.sel(lat=slice(30, 90))
     weighted_n_ext = n_ext.weighted(weights)
     n_ext_mean = weighted_n_ext.mean(['lon', 'lat'], skipna=True)
     n_ext_mean.name = "NHex"
     # Combine into one ds
-    return xr.merge([s_ext_mean, tropics_mean, n_ext_mean])
+    return xr.merge([gl_mean, s_ext_mean, tropics_mean, n_ext_mean])
 
 
 def open_wind(package_dir):
@@ -118,6 +126,18 @@ def average_ocean_sink(package_dir):
     return mean
 
 
+def all_dgvms_gl(package_dir):
+    names = ["CLM5.0", "IBIS", "ISAM", "ISBA-CTRIP", "JSBACH",
+             "JULES-ES", "LPJ", "LPX-Bern", "OCN", "ORCHIDEEv3",
+             "SDGVM", "VISIT", "YIBs"]
+    dfs = []
+    for name in names:
+        df = open_sink(name, "DGVM", package_dir)
+        df[name] = df['land_sink_GL']
+        dfs.append(df[[name]])
+    return pd.concat(dfs)
+
+
 def open_co2(package_dir):
     co2 = pd.read_csv(os.path.join(package_dir,'CO2/monthly_mlo_spo.csv'))
     co2 = co2.set_index(pd.to_datetime(co2['time'])).to_period("M")
@@ -138,7 +158,7 @@ def open_ffs(package_dir):
 
 
 '''
-OPENING DATA THINGS
+OPENING DATA
 
 '''
 
@@ -163,7 +183,7 @@ def open_all_data():
 
 
 '''
-INFERRED LAND SINK THINGS
+INFERRED LAND SINK
 '''
 
 def open_global_ffs(package_dir):
@@ -189,10 +209,10 @@ def inferred_land_sink():
     # Inferred Land sink = FF + LUC - AGR - ocean sink
     package_dir = os.path.dirname(os.path.abspath(__file__))
     ff = open_global_ffs(package_dir) # GtC / month
-    luc = open_luc(package_dir)
+    luc = open_luc(package_dir) # GtC / month
     mgr = open_co2_monthly_gr(package_dir) # GtC / month
     ocean_sink = average_ocean_sink(package_dir)[['ocean_sink_GL']] # GtC / month
     all_data = ff.join(luc).join(mgr).join(ocean_sink)
-    all_data['Inferred'] = all_data['GL_ff_emissions'] + all_data['LUC'] - all_data['monthly_gr'] - all_data['ocean_sink_GL']
+    return all_data
 
-
+generate_all_monthly_data()

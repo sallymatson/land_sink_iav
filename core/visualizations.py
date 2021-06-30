@@ -13,7 +13,6 @@ def monthly_plots():
 	sns.lineplot(x=df2['Month'], y=df2['land_sink_South'], hue=df2['Year'], ax=ax[2])
 	ax[2].set_title("Land sink in the Southern exatropics")
 
-
 	plt.show()
 
 
