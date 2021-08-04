@@ -139,6 +139,18 @@ def all_dgvms_gl(package_dir):
     return pd.concat(dfs, axis=1)
 
 
+def all_dgvms_gl(package_dir):
+    names = ["CLM5.0", "IBIS", "ISAM", "ISBA-CTRIP", "JSBACH",
+             "JULES-ES", "LPJ", "LPX-Bern", "OCN", "ORCHIDEEv3",
+             "SDGVM", "VISIT", "YIBs"]
+    dfs = []
+    for name in names:
+        df = open_sink(name, "DGVM", package_dir)
+        df[name] = df['land_sink_GL']
+        dfs.append(df[[name]])
+    return pd.concat(dfs)
+
+
 def open_co2(package_dir):
     co2 = pd.read_csv(os.path.join(package_dir,'CO2/monthly_mlo_spo.csv'))
     co2 = co2.set_index(pd.to_datetime(co2['time'])).to_period("M")
@@ -247,3 +259,4 @@ def inferred_land_sink_uncertainty():
     # Square all values; sum across each row; take square root
     unc = (unc**2).sum(axis=1) ** 1/2
     unc.to_csv('Inferred_land_sink_unc.csv')
+
