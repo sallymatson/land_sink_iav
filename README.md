@@ -2,7 +2,7 @@
 Dissertation project for MSc Climate Change.
 
 ## Navigating the codebase
-todo!
+The `MODELS.ipynb` and `DATA.ipynb` are general walkthroughs of the modelling and data pipelines. These are a good place to start to understand where the other processing code is.
 
 ## Progress Updates
 
